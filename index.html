@@ -13,61 +13,75 @@
     <body>
         <div id="wrapper">
             <div id="index" class="section">
-                <h1>Spotify Apps API Tutorials</h1>
-                <img src="/img/spotify-char.png" class="right" />
-                <h4>Getting started</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:getting-started:manifest">Creating your manifest file</a></li>
-                    <li><a href="spotify:app:api-tutorial:getting-started:arguments">Handling arguments and creating navigational tabs</a></li>
-                    <li><a href="spotify:app:api-tutorial:getting-started:drag-drop">Dragging and dropping content into an app</a></li>
-                    <li><a href="spotify:app:api-tutorial:getting-started:share">Show "Share" popup</a></li>
-                </ul>
-
-                <h4>UI</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:ui:buttons">Using standard components for buttons</a></li>
-                    <li><a href="spotify:app:api-tutorial:ui:list-view">Showing a list of tracks</a></li>
-                </ul>
-
-                <h4>Playing music</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:playing:play-track">Play a single track</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:play-list-tracks">Play a list of tracks</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:current-track">Get the currently playing track</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:click-to-play">Create a play/pause button with an HTML element</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:skip-track">Skip to the next or previous track</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:star-track">Star and unstar a track</a></li>
-                    <li><a href="spotify:app:api-tutorial:playing:user-toplist">Get a user's top tracks</a></li>
-                </ul>
-
-                <h4>Searching</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:search:search">Returning all tracks with a given search query</a></li>
-                    <li><a href="spotify:app:api-tutorial:search:search-albums-artist">Search albums for an artist</a></li>
-                </ul>
+                <h1>Showlist</h1>
+				<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
 
                 <h4>Playlists</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:playlist:add-track-playlist">Add a track to a playlist</a></li>
-                    <li><a href="spotify:app:api-tutorial:playlist:get-tracks-from-playlist">Get tracks from a playlist URL</a></li>
-                    <li><a href="spotify:app:api-tutorial:playlist:subscribe">Subscribe and unsubscribe from a playlist</a></li>
-                    <li><a href="spotify:app:api-tutorial:playlist:playlist-mosaic">Showing a playlist mosaic image</a></li>
-                </ul>
+--
+				    <div>
+				        <div id="drop_box"></div>
+				        <ul id="playlist"></ul>
+				    </div>
+				<script type="text/javascript">
+				    var sp = getSpotifyApi();
+				    var models = sp.require('$api/models');
 
-                <h4>Interacting with Facebook</h4>
-                <ul>
-                    <li><a href="spotify:app:api-tutorial:facebook:facebook-auth">Authenticate a user with Facebook</a></li>
-                    <li><a href="spotify:app:api-tutorial:facebook:facebook-listening-history">Get a user's listening history from Facebook</a></li>
-                </ul>
+				    // Handle drops
+				    var drop_box = document.querySelector('#drop_box');
 
-                <h4>Experimental &amp; Unsupported</h4>
-                <ul>
-                    <li><a href="/tutorials/experimental/twitter.html">Talking to Twitter</a></li>
-                    <li><a href="/tutorials/experimental/echonest.html">Create an EchoNest radio station</a></li>
-                    <li><a href="/tutorials/experimental/polymaps.html">Display a Polymaps object</a></li>
-                    <li><a href="/tutorials/experimental/google_maps.html">Display a Google Maps object</a></li>
-                </ul>
+				    drop_box.addEventListener('dragstart', function(e){
+				        e.dataTransfer.setData('text/html', this.innerHTML);
+				        e.dataTransfer.effectAllowed = 'copy';
+				    }, false);
 
+				    drop_box.addEventListener('dragenter', function(e){
+				        e.preventDefault();
+				        e.dataTransfer.dropEffect = 'copy';
+				        this.classList.add('over');
+				    }, false);
+
+				    drop_box.addEventListener('dragover', function(e){
+				        e.preventDefault();
+				        e.dataTransfer.dropEffect = 'copy';
+				        return false;
+				    }, false);
+
+				    drop_box.addEventListener('dragleave', function(e){
+				        e.preventDefault();
+				        this.classList.remove('over');
+				    }, false);
+
+				    drop_box.addEventListener('drop', function(e){
+				        e.preventDefault();
+				        var drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
+				        this.classList.remove('over');
+				        var success_message = document.createElement('p');
+				        success_message.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
+				        this.appendChild(success_message);
+						drawPlaylist(drop.uri);
+				    }, false);
+
+					function drawPlaylist(playlist_url) {
+					    var playlistHTML = document.getElementById('playlist');
+
+					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
+					        var fragment = document.createDocumentFragment();
+					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
+					            var link = document.createElement('li');
+					            var a = document.createElement('a');
+					            a.href = playlist.tracks[i].uri;
+					            a.innerHTML = playlist.tracks[i].name;
+					            link.appendChild(a);
+					            fragment.appendChild(link);
+					        }
+					        playlistHTML.appendChild(fragment);
+						});
+					}
+
+				</script>
+
+
+--
             </div>
         </div>
         <script src="/js/rainbow-custom.min.js"></script>
