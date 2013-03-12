@@ -22,6 +22,21 @@
 				        <div id="drop_box"></div>
 				        <ul id="playlist"></ul>
 				    </div>
+				    <div style="clear:left;">
+				    	<select id="show_source">
+				    		<option value="official">Official Shows</option>
+				    		<option value="unofficial">Unofficial Shows</option>
+				    	</select>
+				    	<select id="show_day">
+				    		<option value="tuesday">Tuesday</option>
+				    		<option value="wednesday">Wednesday</option>
+				    		<option value="thursday">Thursday</option>
+				    		<option value="friday">Friday</option>
+				    		<option value="saturday">Saturday</option>
+				    		<option value="sunday">Sunday</option>
+				    	</select>
+				    	<button id="filter_shows">Filter Shows</button>
+				    </div>
 		<form>
 			<h4>Output &nbsp;&nbsp;&nbsp;<input type="button" onclick="window.print();" name="Print" value="Print"></h4>
 		</form>
@@ -64,73 +79,20 @@
 				        var success_message = document.createElement('p');
 				        success_message.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
 				        this.appendChild(success_message);
-						drawPlaylist(drop.uri);
+						collectArtists(drop.uri);
 				    }, false);
 
-					function drawPlaylist(playlist_url) {
-/*
-					    var playlistHTML = document.getElementById('playlist');
-					    var outputHTML = document.getElementById('output');
-
-					    var artist_names = []
+					function collectArtists(playlist_url) {
 					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
-					        var fragment = document.createDocumentFragment();
+					    	var artist_names = []
 					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
-					            var artist = document.createElement('div');
-						    artist.style.float = "left";
-						    artist.style.width = "200px";
-						    artist.style.padding = "5px";
-					            var a = document.createElement('a');
 					            var artist_name = playlist.tracks[i].artists[0].name;
 					            if ($.inArray(artist_name, artist_names) == -1) {
 					            	artist_names.push(artist_name)
-						            a.href = 'http://schedule.sxsw.com/search?q="' + artist_name + '"'; 
-						            a.innerHTML = artist_name;
-						            artist.appendChild(a);
-						            fragment.appendChild(artist);
-
-							    // draw right column
-							    var shows = document.createElement('div');
-							    shows.style.clear = "none";
-							    shows.style.padding = "5px";
-							    shows.innerHTML = "test";
-							    fragment.appendChild(shows);
 					        	}
 					        }
-						
-					        outputHTML.appendChild(fragment);
+					        window.artist_names = artist_names
 						});
-*/
-						drawShowlist();
-					}
-
-					function drawShowlist() {
-					    var outputHTML = document.getElementById('output');
-
-					    var artist_names = []
-					    var fragment = document.createDocumentFragment();
-
-					    $.each(window.official_shows, function(i, show){
-
-					        var artist = document.createElement('div');
-						artist.style.float = "left";
-						artist.style.width = "400px";
-						artist.style.padding = "5px";
-					        var a = document.createElement('a');
-					        var artist_name = i;
-						a.href = 'http://schedule.sxsw.com/search?q="' + artist_name + '"'; 
-						a.innerHTML = artist_name;
-						artist.appendChild(a);
-						fragment.appendChild(artist);
-
-						// draw right column
-						var shows = document.createElement('div');
-						shows.style.clear = "none";
-						shows.style.padding = "5px";
-						shows.innerHTML = "test";
-						fragment.appendChild(shows);
-					        outputHTML.appendChild(fragment);
-					    });
 					}
 
 				</script>
@@ -141,9 +103,11 @@
 
         <script src="/js/rainbow-custom.min.js"></script>
         <script src="/js/jquery.min.js"></script>
-        <script src="/js/stub.js"></script>     
+        <script src="/js/jquery.highlight-4.js"></script>
+        <script src="/js/filter_shows.js"></script>     
+        <script src="/js/preload_shows.js"></script>     
         <script type="text/javascript">
-                window.onload = stub_shows
+                window.onload = preload_shows
         </script>
     
 </body>

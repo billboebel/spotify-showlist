@@ -1,38 +1,35 @@
 "use strict";
 
+function official_url(day, ch) {
+  return 'http://schedule.sxsw.com/?lsort=name&conference=music&day=' + day + '&a=' + ch;
+}
+
+function official_urls() {
+	var sxsw_days = new Array();
+	sxsw_days[12] ='tuesday';
+	sxsw_days[13] ='wednesday';
+	sxsw_days[14] ='thursday';
+	sxsw_days[15] ='friday';
+	sxsw_days[16] ='saturday';
+	sxsw_days[17] ='sunday';
+	var alphabet_str = 'abcdefghijklmonpqrstuvwxyz1';
+	var official_urls = new Array();
+	for (var i = 12; i <= 17; i++) {
+		var day_item = {
+			day: sxsw_days[i],
+			urls: []}
+		for(var ch=0; ch<alphabet_str.length; ch++) {
+			day_item.urls.push(official_url(i, alphabet_str.charAt(ch)));
+		}
+		official_urls.push(day_item);
+	}
+	return official_urls;
+}
+
 var preload_shows = function() {
 
 	window.official_shows = {};
 	window.unofficial_shows = {};
-
-	var official_urls = new Array(
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=a', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=b', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=c', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=d', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=e', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=f', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=g', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=h', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=i', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=j', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=k', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=l', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=m', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=n', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=o', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=p', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=q', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=r', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=s', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=t', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=u', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=v', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=w', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=x', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=y', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=z', 
-		'http://schedule.sxsw.com/?lsort=name&conference=music&day=ALL&a=1');
 
 	var unofficial_urls = new Array(
 		{
@@ -51,7 +48,7 @@ var preload_shows = function() {
 			day: 'thursday',
 			urls: [	
 				'http://showlistaustin.com/sxsw/2013/thuday.shtml',
-		'http://showlistaustin.com/sxsw/2013/thunight.shtml']
+				'http://showlistaustin.com/sxsw/2013/thunight.shtml']
 		},
 		{
 			day: 'friday',
@@ -85,10 +82,24 @@ var preload_shows = function() {
 		})
 	})
 
-	official_urls.forEach(function(url){
-		pullShows(url, parseOfficial);
-	})
-	console.log(window.official_shows);
+	official_urls().forEach(function(day){
+		window.official_shows[day.day] = new Array();
+		day.urls.forEach(function(url){
+			pullShows(url, function(show_html){
+				var cur_shows = parseOfficial(show_html);
+				cur_shows.forEach(function(s){
+					if ($.inArray(s.artist, Object.keys(window.official_shows[day.day])) > -1) {
+						window.official_shows[day.day][s.artist].push(s)
+					} else {
+						window.official_shows[day.day][s.artist] = new Array(s);
+					}
+				})
+			})
+		});
+	});
+
+	$('#filter_shows').bind('click', function(){render_shows()});
+	$('body').css('background-color','#fff');
 
 }
 
@@ -102,22 +113,26 @@ function parseOfficial(show_html) {
 	var show_text = $(show_html).text();
 	show_text = show_text.split('All Categories')[1].split('Add to my schedule');
 	show_text.pop()
+	var shows = new Array();
 	show_text.forEach(function(row){
 		var fields = row.trim().split(/\n+/);
 		var artist = fields[0].trim();
-		if ($.inArray(artist, Object.keys(window.official_shows)) > -1) {
-			window.official_shows[artist].push({
-				location: fields[3].trim(),
-				day: fields[4].trim().split(', ')[0],
-				time: fields[5].trim().split(/\s+/)[0],
-				notes: fields[6].trim()});
+		if (fields[5]) {
+			var time = fields[5].trim().split(/\s+/)[0];
 		} else {
-			window.official_shows[artist] = [{
-					location: fields[3].trim(),
-					day: fields[4].trim().split(', ')[0],
-					time: fields[5].trim().split(/\s+/)[0],
-					notes: fields[6].trim()
-				}];
+			var time = '';
 		}
-	})
+		if (fields[6]) {
+			var notes = fields[6].trim();
+		} else {
+			var notes = '';
+		}
+		shows.push({
+			artist: artist,
+			location: fields[3].trim(),
+			time: time,
+			notes: notes});
+
+	});
+	return shows;
 }
