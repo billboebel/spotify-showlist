@@ -1,4 +1,4 @@
-function stub_shows() {
+var stub_shows = function() {
 	window.showlist = [
 		{
 			artist: "Daft Punk",
@@ -44,5 +44,4 @@ function stub_shows() {
 			]
 		}
 	]
-	return window.showlist;
 }
