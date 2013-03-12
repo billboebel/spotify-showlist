@@ -9,6 +9,7 @@
         <!-- Project CSS files -->
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <link rel="stylesheet" type="text/css" href="css/github.css">
+
     </head>
     <body>
         <div id="wrapper">
@@ -17,11 +18,16 @@
 				<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
 
                 <h4>Playlists</h4>
---
 				    <div>
 				        <div id="drop_box"></div>
 				        <ul id="playlist"></ul>
 				    </div>
+		<form>
+			<h4>Output &nbsp;&nbsp;&nbsp;<input type="button" onclick="window.print();" name="Print" value="Print"></h4>
+		</form>
+				   <div>
+					<div id="output"></div>
+				   </div>
 				<script type="text/javascript">
 				    var sp = getSpotifyApi();
 				    var models = sp.require('$api/models');
@@ -61,42 +67,37 @@
 						drawPlaylist(drop.uri);
 				    }, false);
 
-				    function pullShows(pull_url) {
-				        $.ajax({
-				        	url: pull_url
-				        }).done(function(html) {
-				        	var shows = $(html).text();
-				        	console.log(shows);
-				        });
-					}
-
 					function drawPlaylist(playlist_url) {
 					    var playlistHTML = document.getElementById('playlist');
+					    var outputHTML = document.getElementById('output');
 
 					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
 					        var fragment = document.createDocumentFragment();
 					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
-					            var link = document.createElement('li');
+					            var artist = document.createElement('div');
 					            var a = document.createElement('a');
-					            a.href = playlist.tracks[i].uri;
-					            a.innerHTML = playlist.tracks[i].name;
-					            link.appendChild(a);
-					            fragment.appendChild(link);
+					            a.href = 'http://schedule.sxsw.com/search?q="' + playlist.tracks[i].artists[0].name + '"'; 
+					            a.innerHTML = playlist.tracks[i].artists[0].name;
+					            artist.appendChild(a);
+					            fragment.appendChild(artist);
 					        }
-					        playlistHTML.appendChild(fragment);
+						
+					        outputHTML.appendChild(fragment);
 						});
 					}
-
-					pullShows('http://showlistaustin.com/sxsw/2013/tueday.shtml');
 
 				</script>
 
 
---
             </div>
         </div>
+
         <script src="/js/rainbow-custom.min.js"></script>
-        <script src="/js/tutorial.js"></script>
         <script src="/js/jquery.min.js"></script>
-    </body>
+        <script src="/js/stub.js"></script>     
+        <script type="text/javascript">
+                window.onload = stub_shows
+        </script>
+    
+</body>
 </html>
