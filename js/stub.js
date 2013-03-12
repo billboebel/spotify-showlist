@@ -44,4 +44,5 @@ function stub_shows() {
 			]
 		}
 	]
+	return window.showlist;
 }
