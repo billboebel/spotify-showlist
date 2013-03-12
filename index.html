@@ -61,6 +61,15 @@
 						drawPlaylist(drop.uri);
 				    }, false);
 
+				    function pullShows(pull_url) {
+				        $.ajax({
+				        	url: pull_url
+				        }).done(function(html) {
+				        	var shows = $(html).text();
+				        	console.log(shows);
+				        });
+					}
+
 					function drawPlaylist(playlist_url) {
 					    var playlistHTML = document.getElementById('playlist');
 
