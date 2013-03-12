@@ -68,6 +68,7 @@
 				    }, false);
 
 					function drawPlaylist(playlist_url) {
+/*
 					    var playlistHTML = document.getElementById('playlist');
 					    var outputHTML = document.getElementById('output');
 
@@ -76,6 +77,9 @@
 					        var fragment = document.createDocumentFragment();
 					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
 					            var artist = document.createElement('div');
+						    artist.style.float = "left";
+						    artist.style.width = "200px";
+						    artist.style.padding = "5px";
 					            var a = document.createElement('a');
 					            var artist_name = playlist.tracks[i].artists[0].name;
 					            if ($.inArray(artist_name, artist_names) == -1) {
@@ -84,11 +88,49 @@
 						            a.innerHTML = artist_name;
 						            artist.appendChild(a);
 						            fragment.appendChild(artist);
+
+							    // draw right column
+							    var shows = document.createElement('div');
+							    shows.style.clear = "none";
+							    shows.style.padding = "5px";
+							    shows.innerHTML = "test";
+							    fragment.appendChild(shows);
 					        	}
 					        }
 						
 					        outputHTML.appendChild(fragment);
 						});
+*/
+						drawShowlist();
+					}
+
+					function drawShowlist() {
+					    var outputHTML = document.getElementById('output');
+
+					    var artist_names = []
+					    var fragment = document.createDocumentFragment();
+
+					    $.each(window.official_shows, function(i, show){
+
+					        var artist = document.createElement('div');
+						artist.style.float = "left";
+						artist.style.width = "400px";
+						artist.style.padding = "5px";
+					        var a = document.createElement('a');
+					        var artist_name = i;
+						a.href = 'http://schedule.sxsw.com/search?q="' + artist_name + '"'; 
+						a.innerHTML = artist_name;
+						artist.appendChild(a);
+						fragment.appendChild(artist);
+
+						// draw right column
+						var shows = document.createElement('div');
+						shows.style.clear = "none";
+						shows.style.padding = "5px";
+						shows.innerHTML = "test";
+						fragment.appendChild(shows);
+					        outputHTML.appendChild(fragment);
+					    });
 					}
 
 				</script>
@@ -96,9 +138,6 @@
 
             </div>
         </div>
-
-	<div style="float:left; padding:20px">left</div>
-	<div style="clear:none; padding:20px">right</div>
 
         <script src="/js/rainbow-custom.min.js"></script>
         <script src="/js/jquery.min.js"></script>
