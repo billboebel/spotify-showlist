@@ -71,15 +71,20 @@
 					    var playlistHTML = document.getElementById('playlist');
 					    var outputHTML = document.getElementById('output');
 
+					    var artist_names = []
 					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
 					        var fragment = document.createDocumentFragment();
 					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
 					            var artist = document.createElement('div');
 					            var a = document.createElement('a');
-					            a.href = 'http://schedule.sxsw.com/search?q="' + playlist.tracks[i].artists[0].name + '"'; 
-					            a.innerHTML = playlist.tracks[i].artists[0].name;
-					            artist.appendChild(a);
-					            fragment.appendChild(artist);
+					            var artist_name = playlist.tracks[i].artists[0].name;
+					            if ($.inArray(artist_name, artist_names) == -1) {
+					            	artist_names.push(artist_name)
+						            a.href = 'http://schedule.sxsw.com/search?q="' + artist_name + '"'; 
+						            a.innerHTML = artist_name;
+						            artist.appendChild(a);
+						            fragment.appendChild(artist);
+					        	}
 					        }
 						
 					        outputHTML.appendChild(fragment);
