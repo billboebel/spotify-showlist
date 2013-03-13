@@ -8,7 +8,7 @@ function draw_unofficial_shows(day) {
 
 	});
 	$.each(window.artist_names, function(j, a){
-		$('#output').highlight(a);
+		$('#output').highlight(a, { wordsOnly: true });
 	});
 	$('.highlight').css('background-color', 'yellow');
 	$('h4').css('font', '9px/14px Verdana, Arial, Helvetica, sans-serif');
@@ -29,28 +29,12 @@ function filter_official_shows(day) {
 
 function draw_official_shows(day) {
 	$('#output').html('');
-    var outputHTML = document.getElementById('output');
-    var fragment = document.createDocumentFragment();
-    $.each(filter_official_shows(day), function(i, show){
-        var artist = document.createElement('div');
-		artist.style.float = "left";
-		artist.style.width = "400px";
-		artist.style.padding = "5px";
-        var a = document.createElement('a');
-        var artist_name = i;
-		a.href = 'http://schedule.sxsw.com/search?q="' + artist_name + '"'; 
-		a.innerHTML = artist_name;
-		artist.appendChild(a);
-		fragment.appendChild(artist);
-		// draw right column
-		var shows = document.createElement('div');
-		shows.style.clear = "none";
-		shows.style.padding = "5px";
-		shows.innerHTML = show.map(function(d){
-			return "<p>" + [d.time, d.location].join("<br />") + "</p>"
-		});
-		fragment.appendChild(shows);
-        outputHTML.appendChild(fragment);
+    $.each(filter_official_shows(day), function(artist_name, artist_shows){
+    	var output_str = "<p><a href='http://schedule.sxsw.com/search?q=" + artist_name + "'>" + 
+    		artist_name + "</a><br />" + 
+    		artist_shows.map(function(d){return "<p>" + [d.time, d.location].join("<br />") + "</p>"}) + 
+    		"</p><br />";
+    	$('#output').append(output_str);
     });
 }
 
