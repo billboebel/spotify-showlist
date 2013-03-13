@@ -32,7 +32,7 @@ function draw_official_shows(day) {
     $.each(filter_official_shows(day), function(artist_name, artist_shows){
     	var output_str = "<p><a href='http://schedule.sxsw.com/search?q=" + artist_name + "'>" + 
     		artist_name + "</a><br />" + 
-    		artist_shows.map(function(d){return "<p>" + [d.time, d.location].join("<br />") + "</p>"}) + 
+    		artist_shows.map(function(d){return [d.time, d.location].join(" at ")}).join("<br />") + 
     		"</p><br />";
     	$('#output').append(output_str);
     });
