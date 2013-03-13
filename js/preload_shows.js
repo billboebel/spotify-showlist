@@ -12,9 +12,13 @@ function official_urls() {
 	sxsw_days[15] ='friday';
 	sxsw_days[16] ='saturday';
 	sxsw_days[17] ='sunday';
-	var alphabet_str = 'abcdefghijklmonpqrstuvwxyz1';
 	var official_urls = new Array();
 	for (var i = 12; i <= 17; i++) {
+		if (i == 12) {
+			var alphabet_str = 'a';
+		} else {
+			var alphabet_str = 'abcdefghijklmonpqrstuvwxyz1';
+		}
 		var day_item = {
 			day: sxsw_days[i],
 			urls: []}
@@ -118,7 +122,7 @@ function parseOfficial(show_html) {
 		var fields = row.trim().split(/\n+/);
 		var artist = fields[0].trim();
 		if (fields[5]) {
-			var time = fields[5].trim().split(/\s+/)[0];
+			var time = row.match(/[0-9]+\:[0-9]+[ap]m/i);
 		} else {
 			var time = '';
 		}
