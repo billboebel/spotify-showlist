@@ -1,20 +1,12 @@
 function draw_unofficial_shows(day) {
 	$('#output').html('');
-	var artist_pattern = new RegExp(window.artist_names.join('|'), "i");
+	var artist_pattern = new RegExp(window.artist_names.map(function(n){return "\\b" + n + "\\b";}).join('|'), "i");
 	$.each(window.unofficial_shows[day], function(i, show){
-		if (show.search(artist_pattern) > -1) {
+		if (show.slice(show.indexOf('<li>'),show.length-1).search(artist_pattern) > -1) {
 			$('#output').append('<br />' + show);
 		}
-
 	});
-	$.each(window.artist_names, function(j, a){
-		$('#output').highlight(a, { wordsOnly: true });
-	});
-	$('.highlight').css('background-color', 'yellow');
-	$('h4').css('font', '9px/14px Verdana, Arial, Helvetica, sans-serif');
-	$('ul').css('list-style', 'square');
-	$('li').css('margin-left', '10px');
-	$('h4').css('margin-bottom', '0');
+	$('#output').highlight(window.artist_names, { wordsOnly: true });
 }
 
 function filter_official_shows(day) {
