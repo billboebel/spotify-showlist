@@ -22,7 +22,7 @@ function filter_official_shows(day) {
 function draw_official_shows(day) {
 	$('#output').html('');
     $.each(filter_official_shows(day), function(artist_name, artist_shows){
-    	var output_str = "<p><a href='http://schedule.sxsw.com/search?q=" + artist_name + "'>" + 
+    	var output_str = "<p><a href='http://schedule.sxsw.com/search?q=\"" + artist_name + "\"'>" + 
     		artist_name + "</a><br />" + 
     		artist_shows.map(function(d){return [d.time, d.location].join(" at ")}).join("<br />") + 
     		"</p><br />";
