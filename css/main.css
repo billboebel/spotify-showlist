@@ -29,25 +29,9 @@ h1 {font-size:2em;}
 #index h1, #index ul {margin:0 0 30px;}
 #index a:hover {color:#83be20;}
 
-.highlight { background-color: #FFFF00; }
-
 h4 {
 	font: 9px/14px Verdana, Arial, Helvetica, sans-serif;
 	font-size: 80%;
 	margin-top: 0;
 	margin-bottom: 0;
-}
-	
-div.row {
-	clear: left;
-}
-
-div.artist_name {
-	float: left;
-	clear: left;
-}
-
-div.artist_shows {
-	float: right;
-	clear: none;
 }
