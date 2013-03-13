@@ -131,7 +131,7 @@ function pullShows(pull_url, callback) {
 
 function parseOfficial(show_html) {
 	var shows = new Array();
-	var show_text = $(show_html).text();
+	var show_text = $(show_html.replace(/\/assets\//g, 'http://schedule.sxsw.com/assets/')).text();
 	if (show_text.search('All Categories') > -1) {
 		show_text = show_text.split('All Categories')[1].split('Add to my schedule');
 		show_text.pop()

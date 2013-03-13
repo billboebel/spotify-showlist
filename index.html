@@ -50,12 +50,9 @@
 				    	</select>
 				    	<button id="filter_shows" disabled="true">Filter Shows</button>
 				    </div>
-		<!--<form>
-			<h4>Output &nbsp;&nbsp;&nbsp;<input type="button" onclick="window.print();" name="Print" value="Print"></h4>
-		</form>-->
-				   <div>
-					<div id="output"></div>
-				   </div>
+					<div>
+						<div id="output"></div>
+					</div>
 				<script type="text/javascript">
 				    var sp = getSpotifyApi();
 				    var models = sp.require('$api/models');
@@ -120,7 +117,7 @@
         <script src="/js/filter_shows.js"></script>     
         <script src="/js/preload_shows.js"></script>     
         <script type="text/javascript">
-                window.onload = preload_shows
+			window.onload = preload_shows
         </script>
     
 </body>
