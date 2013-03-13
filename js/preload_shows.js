@@ -86,25 +86,41 @@ var preload_shows = function() {
 		})
 	})
 
-	official_urls().forEach(function(day){
-		window.official_shows[day.day] = new Array();
-		day.urls.forEach(function(url){
-			pullShows(url, function(show_html){
-				var cur_shows = parseOfficial(show_html);
-				cur_shows.forEach(function(s){
-					if ($.inArray(s.artist, Object.keys(window.official_shows[day.day])) > -1) {
-						window.official_shows[day.day][s.artist].push(s)
-					} else {
-						window.official_shows[day.day][s.artist] = new Array(s);
-					}
-				})
-			})
-		});
-	});
+	window.urls_to_load = official_urls();
+	window.official_shows['tuesday'] = new Array();
+	window.official_shows['wednesday'] = new Array();
+	window.official_shows['thursday'] = new Array();
+	window.official_shows['friday'] = new Array();
+	window.official_shows['saturday'] = new Array();
+	window.official_shows['sunday'] = new Array();
+	preload_official_shows();
 
 	$('#filter_shows').bind('click', function(){render_shows()});
 	$('body').css('background-color','#fff');
 
+}
+
+function preload_official_shows() {
+	if (window.urls_to_load.length > 0) {
+		var day = window.urls_to_load[0];
+		var url = window.urls_to_load[0].urls.shift();
+		pullShows(url, function(show_html){
+			var cur_shows = parseOfficial(show_html);
+			cur_shows.forEach(function(s){
+				if ($.inArray(s.artist, Object.keys(window.official_shows[day.day])) > -1) {
+					window.official_shows[day.day][s.artist].push(s)
+				} else {
+					window.official_shows[day.day][s.artist] = new Array(s);
+				}
+			})
+			if (window.urls_to_load[0].urls.length == 0) {
+				window.urls_to_load.shift();
+			}
+			preload_official_shows();
+		});
+	} else {
+		$('#filter_shows').prop('disabled', false);
+	}
 }
 
 function pullShows(pull_url, callback) {
@@ -114,29 +130,31 @@ function pullShows(pull_url, callback) {
 }
 
 function parseOfficial(show_html) {
-	var show_text = $(show_html).text();
-	show_text = show_text.split('All Categories')[1].split('Add to my schedule');
-	show_text.pop()
 	var shows = new Array();
-	show_text.forEach(function(row){
-		var fields = row.trim().split(/\n+/);
-		var artist = fields[0].trim();
-		if (fields[5]) {
-			var time = row.match(/[0-9]+\:[0-9]+[ap]m/i);
-		} else {
-			var time = '';
-		}
-		if (fields[6]) {
-			var notes = fields[6].trim();
-		} else {
-			var notes = '';
-		}
-		shows.push({
-			artist: artist,
-			location: fields[3].trim(),
-			time: time,
-			notes: notes});
+	var show_text = $(show_html).text();
+	if (show_text.search('All Categories') > -1) {
+		show_text = show_text.split('All Categories')[1].split('Add to my schedule');
+		show_text.pop()
+		show_text.forEach(function(row){
+			var fields = row.trim().split(/\n+/);
+			var artist = fields[0].trim();
+			if (fields[5]) {
+				var time = row.match(/[0-9]+\:[0-9]+[ap]m/i);
+			} else {
+				var time = '';
+			}
+			if (fields[6]) {
+				var notes = fields[6].trim();
+			} else {
+				var notes = '';
+			}
+			shows.push({
+				artist: artist,
+				location: fields[3].trim(),
+				time: time,
+				notes: notes});
 
-	});
+		});
+	}
 	return shows;
 }
