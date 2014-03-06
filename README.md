@@ -2,7 +2,7 @@
 
 Updated for 2014. Unofficial shows work currently. Official shows do not work.
 
-When the app loads, wait about 30 seconds for the "Filter" button to become active. Whlie it is innactive the app is downloading the showlists in the background.
+### When the app loads, wait about 30 seconds for the "Filter Shows" button to become active. Whlie it is innactive the app is downloading the showlists in the background.
 
 1. Enable developer access for your Spotify account here.
 2. Create the following folder on your computer:
