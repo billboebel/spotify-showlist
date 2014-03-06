@@ -1,29 +1,34 @@
 "use strict";
 
+// Change these variables each year
+var sxsw_year = '2014';
+var sxsw_start_day = 11;
+
 function official_url(day, ch) {
   return 'http://schedule.sxsw.com/?lsort=name&conference=music&day=' + day + '&a=' + ch;
 }
 
 function official_urls() {
 	var sxsw_days = new Array();
-	sxsw_days[12] ='tuesday';
-	sxsw_days[13] ='wednesday';
-	sxsw_days[14] ='thursday';
-	sxsw_days[15] ='friday';
-	sxsw_days[16] ='saturday';
-	sxsw_days[17] ='sunday';
+	sxsw_days[sxsw_start_day] ='tuesday';
+	sxsw_days[sxsw_start_day + 1] ='wednesday';
+	sxsw_days[sxsw_start_day + 2] ='thursday';
+	sxsw_days[sxsw_start_day + 3] ='friday';
+	sxsw_days[sxsw_start_day + 4] ='saturday';
+	sxsw_days[sxsw_start_day + 5] ='sunday';
 	var official_urls = new Array();
-	for (var i = 12; i <= 17; i++) {
-		if (i == 12) {
+	for (var i = 0; i <= 5; i++) {
+		var sxsw_day = sxsw_start_day + i;
+		if (i == 0) {
 			var alphabet_str = 'a';
 		} else {
 			var alphabet_str = 'abcdefghijklmonpqrstuvwxyz1';
 		}
 		var day_item = {
-			day: sxsw_days[i],
+			day: sxsw_days[sxsw_day],
 			urls: []}
 		for(var ch=0; ch<alphabet_str.length; ch++) {
-			day_item.urls.push(official_url(i, alphabet_str.charAt(ch)));
+			day_item.urls.push(official_url(sxsw_day, alphabet_str.charAt(ch)));
 		}
 		official_urls.push(day_item);
 	}
@@ -39,38 +44,38 @@ var preload_shows = function() {
 		{
 			day: 'tuesday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/tueday.shtml',
-				'http://showlistaustin.com/sxsw/2013/tuenight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/tueday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/tuenight.shtml']
 		},
 		{
 			day: 'wednesday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/wedday.shtml',
-				'http://showlistaustin.com/sxsw/2013/wednight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/wedday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/wednight.shtml']
 		},
 				{
 			day: 'thursday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/thuday.shtml',
-				'http://showlistaustin.com/sxsw/2013/thunight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/thuday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/thunight.shtml']
 		},
 		{
 			day: 'friday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/friday.shtml',
-				'http://showlistaustin.com/sxsw/2013/frinight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/friday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/frinight.shtml']
 		},
 		{
 			day: 'saturday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/satday.shtml',
-				'http://showlistaustin.com/sxsw/2013/satnight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/satday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/satnight.shtml']
 		},
 		{
 			day: 'sunday',
 			urls: [	
-				'http://showlistaustin.com/sxsw/2013/sunday.shtml',
-				'http://showlistaustin.com/sxsw/2013/sunnight.shtml']
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/sunday.shtml',
+				'http://showlistaustin.com/sxsw/' + sxsw_year + '/sunnight.shtml']
 		});
 
 	unofficial_urls.forEach(function(day){
