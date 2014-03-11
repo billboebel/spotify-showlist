@@ -45,6 +45,7 @@ var draw_official_shows = function(day) {
 
 var draw_unofficial_shows = function(day) {
   $('#output').html('');
+  if (window.artist_names.length === 0) return;
   var artist_pattern = new RegExp(window.artist_names.map(function(n){return "\\b" + n + "\\b";}).join('|'), "i");
   $.each(window.unofficial_shows[day], function(i, show){
     if (show.slice(show.indexOf('<li>'),show.length-1).search(artist_pattern) > -1) {
@@ -134,27 +135,34 @@ var load_day_official = function(day, fn) {
   });
 };
 
+var finished = {};
+
+var load_page_unofficial = function(day, day_part, fn) {
+  var shows_html, shows, url = 'http://showlistaustin.com/sxsw/' + sxsw_year + '/' + day.substr(0,3) + day_part + '.shtml',
+      div_id = 'scraper-unofficial-' + day.substr(0,3) + day_part;
+  fn = fn || noop;
+  $('body').append('<div id="' + div_id + '" style="display: none;" />');
+  $('#' + div_id).load(url + ' .printcontent', function(){
+    shows_html = $('#' + div_id)[0].getElementsByTagName('ul')[0].innerHTML;
+    shows = shows_html.split(/<hr style="color:#cccccc;"\s*\/*>/);
+    for (var i = 0; i < shows.length; i++) {
+      if (!shows[i]) continue;
+      window.unofficial_shows[day].push(shows[i]);
+    }
+    $('#' + div_id).remove();
+    finished[day].push(url);
+    if (finished[day] && finished[day].length === 2) fn();
+  });
+};
+
 var load_day_unofficial = function(day, fn) {
-  var cur_shows, fn = fn || noop,
-      day_part = day.substr(0,3),
-      urls = ['http://showlistaustin.com/sxsw/' + sxsw_year + '/' + day_part + 'day.shtml',
-        'http://showlistaustin.com/sxsw/' + sxsw_year + '/' + day_part + 'day.shtml'],
-      finished = [];
+  var day_parts = ['day', 'night'];
   if (!window.unofficial_shows) window.unofficial_shows = {};
   if (already_loaded('unofficial_shows', day)) return fn();
   window.unofficial_shows[day] = [];
-  for (var i = 0; i < urls.length; i++) {
-    $.ajax({
-      url: urls[i]
-    }).done(function(show_html){
-      cur_shows = show_html.split('<hr style="color:#cccccc;" />');
-      cur_shows.shift();
-      for (var j = 0; j < cur_shows.length; j++) {
-        window.unofficial_shows[day].push(cur_shows[j]);
-      }
-      finished.push(urls[i]);
-      if (finished.length === urls.length) fn();
-    });
+  finished[day] = [];
+  for (var i = 0; i < day_parts.length; i++) {
+    load_page_unofficial(day, day_parts[i], fn);
   }
 };
 
