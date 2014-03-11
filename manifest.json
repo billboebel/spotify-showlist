@@ -1,9 +1,9 @@
 {
 	"AppDescription": {
-		"en": "Helps you find upcoming shows for bands in your playlists"
+		"en": "Helps you find shows at SXSW for bands in your playlists"
 	},
 	"AppIcon": {
-		"36x18": "tutorial.png"
+		"36x18": "img/spotify-icon.png"
 	},
 	"AppName": {
 		"en": "Showlist"
@@ -11,20 +11,6 @@
 	"BundleIdentifier": "showlist",
 	"BundleType": "Application",
 	"BundleVersion": "0.1",
-	"DefaultTabs": [
-		{
-			"arguments": "index",
-			"title": {
-				"en": "Home"
-			}
-		},
-		{
-			"arguments": "tabs",
-			"title": {
-				"en": "How to use tabs"
-			}
-        }
-	],
 	"Dependencies": {
 	  "api": "0.2.3",
 	  "util": "0.1.0",

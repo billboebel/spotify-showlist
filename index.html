@@ -1,124 +1,71 @@
 <!DOCTYPE html>
-    <head>
-        <!-- Spotify CSS files -->
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
+<html>
 
-        <!-- Project CSS files -->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="stylesheet" type="text/css" href="css/github.css">
+<head>
 
-        <style>
-        .highlight {
-        	background-color: yellow;
-        	text-decoration: underline;
-        	font-weight: bold;
-        }
-        h4 {
-        	font: 9px/14px Verdana, Arial, Helvetica, sans-serif;
-        	margin-bottom: 0;
-        }
-        ul {list-style: square;}
-        li {margin-left: 10px;}
-        </style>
-    </head>
-    <body>
-        <div id="wrapper">
-            <div id="index" class="section">
-                <h1>Showlist</h1>
-				<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
+<!-- Spotify CSS files -->
+<link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
 
-                <h4>Playlists</h4>
-				    <div>
-				        <div id="drop_box"></div>
-				        <ul id="playlist"></ul>
-				    </div>
-				    <div style="clear:left;">
-				    	<select id="show_source">
-				    		<option value="official">Official Shows</option>
-				    		<option value="unofficial">Unofficial Shows</option>
-				    	</select>
-				    	<select id="show_day">
-				    		<option value="tuesday">Tuesday</option>
-				    		<option value="wednesday">Wednesday</option>
-				    		<option value="thursday">Thursday</option>
-				    		<option value="friday">Friday</option>
-				    		<option value="saturday">Saturday</option>
-				    		<option value="sunday">Sunday</option>
-				    	</select>
-				    	<button id="filter_shows" disabled="true">Filter Shows</button>
-				    </div>
-					<div>
-						<div id="output"></div>
-					</div>
-				<script type="text/javascript">
-				    var sp = getSpotifyApi();
-				    var models = sp.require('$api/models');
+<!-- Project CSS files -->
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/github.css">
 
-				    // Handle drops
-				    var drop_box = document.querySelector('#drop_box');
+<style>
+.highlight {
+	background-color: yellow;
+	text-decoration: underline;
+	font-weight: bold;
+}
+h4 {
+	font: 9px/14px Verdana, Arial, Helvetica, sans-serif;
+	margin-bottom: 0;
+}
+ul {list-style: square;}
+li {margin-left: 10px;}
+</style>
 
-				    drop_box.addEventListener('dragstart', function(e){
-				        e.dataTransfer.setData('text/html', this.innerHTML);
-				        e.dataTransfer.effectAllowed = 'copy';
-				    }, false);
+</head>
 
-				    drop_box.addEventListener('dragenter', function(e){
-				        e.preventDefault();
-				        e.dataTransfer.dropEffect = 'copy';
-				        this.classList.add('over');
-				    }, false);
+<body>
 
-				    drop_box.addEventListener('dragover', function(e){
-				        e.preventDefault();
-				        e.dataTransfer.dropEffect = 'copy';
-				        return false;
-				    }, false);
+<div id="wrapper">
+  <div id="index" class="section">
+    <h1>Showlist</h1>
+  	<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
+    <h4>Playlists</h4>
+    <div>
+      <div id="drop_box"></div>
+      <ul id="playlist"></ul>
+    </div>
+    <div style="clear:left;">
+    	<select id="show_source">
+    		<option value="official">Official Shows</option>
+    		<option value="unofficial">Unofficial Shows</option>
+    	</select>
+    	<select id="show_day">
+    		<option value="tuesday">Tuesday</option>
+    		<option value="wednesday">Wednesday</option>
+    		<option value="thursday">Thursday</option>
+    		<option value="friday">Friday</option>
+    		<option value="saturday">Saturday</option>
+    		<option value="sunday">Sunday</option>
+    	</select>
+    	<button id="filter_shows">Filter Shows</button>
+      <img id="loading-img" src="img/spinner.gif" style="display:none;" />
+    </div>
+  	<div>
+  		<div id="output"></div>
+  	</div>
+  </div>
+</div>
 
-				    drop_box.addEventListener('dragleave', function(e){
-				        e.preventDefault();
-				        this.classList.remove('over');
-				    }, false);
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.highlight.js"></script>
+<script src="/js/showlist.js"></script>     
 
-				    drop_box.addEventListener('drop', function(e){
-				        e.preventDefault();
-				        var drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
-				        this.classList.remove('over');
-				        var success_message = document.createElement('p');
-				        success_message.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
-				        this.appendChild(success_message);
-						collectArtists(drop.uri);
-				    }, false);
-
-					function collectArtists(playlist_url) {
-					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
-					    	var artist_names = []
-					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
-					            var artist_name = playlist.tracks[i].artists[0].name;
-					            if ($.inArray(artist_name, artist_names) == -1) {
-					            	artist_names.push(artist_name)
-					        	}
-					        }
-					        window.artist_names = artist_names
-						});
-					}
-
-				</script>
-
-
-            </div>
-        </div>
-
-        <script src="/js/rainbow-custom.min.js"></script>
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/jquery.highlight.js"></script>
-        <script src="/js/filter_shows.js"></script>     
-        <script src="/js/preload_shows.js"></script>     
-        <script type="text/javascript">
-			window.onload = preload_shows
-        </script>
-    
 </body>
+
 </html>
