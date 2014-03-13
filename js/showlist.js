@@ -102,12 +102,14 @@ var already_loaded = function(showlist, day) {
 var load_day_official = function(day, fn) {
   var artist, location, time, notes, nodes, node,
       div_id = 'scraper-official-' + day,
-      fn = fn || noop;
+      fn = fn || noop,
+      url = official_url(day);
   if (!window.official_shows) window.official_shows = {};
   if (already_loaded('official_shows', day)) return fn();
   window.official_shows[day] = [];
+  if (typeof url === 'undefined') return fn();
   $('body').append('<div id="' + div_id + '" style="display: none;" />');
-  $('#' + div_id).load(official_url(day) + ' #main', function(){
+  $('#' + div_id).load(url + ' #main', function(){
     nodes = $('#' + div_id +' #main .data')[0].childNodes;
     for (var i = 0; i < nodes.length; i++) {
       if (typeof nodes[i].id === 'undefined' || nodes[i].id.substr(0, 11) !== 'cell_event_') {
