@@ -7,10 +7,10 @@
 var noop = function(){},
     sp = getSpotifyApi(),
     models = sp.require('$api/models'),
-    sxsw_start_day = 11,
+    sxsw_start_day = 17,
     sxsw_days = ['tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
     sxsw_end_day = sxsw_start_day + sxsw_days.length,
-    sxsw_year = 2014;
+    sxsw_year = 2015;
 
 window.artist_names = [];
 window.official_shows = {};

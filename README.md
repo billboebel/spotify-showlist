@@ -1,6 +1,6 @@
 # Spotify "Tell me what bands to see at SXSW" App
 
-Updated for 2014.
+Updated for 2015.
 
 1. Enable developer access for your Spotify account here.
 2. Create the following folder on your computer:
