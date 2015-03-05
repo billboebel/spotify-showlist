@@ -1,70 +1,16 @@
-# Spotify Apps API Tutorial
-![Spotify Apps Tutorial home screen](https://github.com/spotify/apps-tutorial/raw/master/img/screenshot.png)
+# Spotify "Tell me what bands to see at SXSW" App
 
-This is a Spotify App that explains shows useful code snippets that can help you make a [Spotify Apps](https://developer.spotify.com/technologies/apps/). It uses version 0.x of the Spotify Apps API. If you want to have a look at the tutorial that uses a preliminary version 1.x of the Spotify Apps API, [check the 1.0 branch](https://github.com/spotify/apps-tutorial/tree/1.0).
+Updated for 2015.
 
-## Installation
-
- 1. Sign up for a [developer account on Spotify](http://developer.spotify.com/en/spotify-apps-api/developer-signup/)
- 2. Open Terminal, `mkdir ~/Spotify`
- 3. `cd ~/Spotify`
- 4. `git clone git://github.com/spotify/apps-tutorial.git`
- 6. Download the [latest version of Spotify](http://spotify.com/download)
- 7. Open Spotify and type "spotify:app:api-tutorial" in the search bar (restart Spotify completely in case it doesn't find the App at first)
-
-## More information
-
- * [API Reference](https://developer.spotify.com/technologies/apps/docs/)
- * [Integration Guidelines](http://developer.spotify.com/download/spotify-apps-api/guidelines/)
- * [Spotify-tagged questions on StackOverflow](http://stackoverflow.com/questions/tagged/spotify)
- * [@SpotifyPlatform](https://twitter.com/#!/SpotifyPlatform) on Twitter
-
-Your feedback is welcome! Please email mager@spotify.com.
-
-
-## Topics covered
-
-#### Getting started
-
- * Creating your manifest file
- * Handling arguments and creating navigational tabs
- * Dragging and dropping content into an app
- * Show "Share" popup
-
-#### UI
-
- * Using standard components for buttons
- * Showing a list of tracks
-
-#### Playing music
-
- * Play a single song
- * Play a list of songs
- * Get the currently playing track
- * Create a play/pause button with an HTML element
- * Skip to the next or previous track
- * Star and unstar a track
- * Get a user's top tracks
-
-#### Searching
-
- * Returning all tracks with a given search query
- * Search albums for an artist
-
-#### Playlists
-
- * Add a song to a playlist
- * Get songs from a playlist URL
- * Subscribe to a playlist
- * Showing a playlist mosaic image
-
-#### Interacting with Facebook
-
- * Authenticate a user with Facebook
- * Get a user's listening history from Facebook
-
-#### Experimental & Unsupported
-
- * Talking to Twitter
- * Create an EchoNest radio station
- * Display a Polymaps object
+1. Enable developer access for your Spotify account here.
+2. Create the following folder on your computer:
+   ~/Spotify (Mac OS X and Linux)
+   “My Documents\Spotify” (Windows)
+3. Pull the code from my github account and place it in the Spotify folder you just created.  You can pull the code either using “git clone” or by downloading the zip file and unzipping it into that folder. You should end up with a folder called “spotify-showlist” inside of your Spotify folder.
+4. Launch Spotify.
+5. Update Spotify if you are not running the latest version.
+6. In the Spotify search box, type the following and press Enter:  spotify:app:showlist
+7. You should now see the app.  You can drag one or more of your playlists to the app, select whether you want to see Official Shows or Unofficial Shows, select a day, then press Filter Shows.
+8. You should now see a list of shows that match your selection.
+9. Spotify doesn’t let you print from inside the app due to a limitation with the Chromium Embeded Framework (I talked w/ the head of Spotify’s developer relations about it at a SXSW party last night), so if you want to print the list of shows you will need to copy & paste it into another app such as MS Word.  Make sure you copy and paste the whole window if you want to retain the font styling for printing.
+10. The Official show listing includes a link to the SXSW site for each band so that you can add shows to your SXSW schedule and sync it to the handy SXSW Go mobile app.

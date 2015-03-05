@@ -1,90 +1,71 @@
 <!DOCTYPE html>
-    <head>
-        <!-- Spotify CSS files -->
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
-        <link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
+<html>
 
-        <!-- Project CSS files -->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="stylesheet" type="text/css" href="css/github.css">
-    </head>
-    <body>
-        <div id="wrapper">
-            <div id="index" class="section">
-                <h1>Showlist</h1>
-				<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
+<head>
 
-                <h4>Playlists</h4>
---
-				    <div>
-				        <div id="drop_box"></div>
-				        <ul id="playlist"></ul>
-				    </div>
-				<script type="text/javascript">
-				    var sp = getSpotifyApi();
-				    var models = sp.require('$api/models');
+<!-- Spotify CSS files -->
+<link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
+<link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
 
-				    // Handle drops
-				    var drop_box = document.querySelector('#drop_box');
+<!-- Project CSS files -->
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/github.css">
 
-				    drop_box.addEventListener('dragstart', function(e){
-				        e.dataTransfer.setData('text/html', this.innerHTML);
-				        e.dataTransfer.effectAllowed = 'copy';
-				    }, false);
+<style>
+.highlight {
+	background-color: yellow;
+	text-decoration: underline;
+	font-weight: bold;
+}
+h4 {
+	font: 9px/14px Verdana, Arial, Helvetica, sans-serif;
+	margin-bottom: 0;
+}
+ul {list-style: square;}
+li {margin-left: 10px;}
+</style>
 
-				    drop_box.addEventListener('dragenter', function(e){
-				        e.preventDefault();
-				        e.dataTransfer.dropEffect = 'copy';
-				        this.classList.add('over');
-				    }, false);
+</head>
 
-				    drop_box.addEventListener('dragover', function(e){
-				        e.preventDefault();
-				        e.dataTransfer.dropEffect = 'copy';
-				        return false;
-				    }, false);
+<body>
 
-				    drop_box.addEventListener('dragleave', function(e){
-				        e.preventDefault();
-				        this.classList.remove('over');
-				    }, false);
+<div id="wrapper">
+  <div id="index" class="section">
+    <h1>Showlist</h1>
+  	<p class="description">Drag playlists to the box, select sources of shows, then press Go.</p>
+    <h4>Playlists</h4>
+    <div>
+      <div id="drop_box"></div>
+      <ul id="playlist"></ul>
+    </div>
+    <div style="clear:left;">
+    	<select id="show_source">
+    		<option value="official">Official Shows</option>
+    		<option value="unofficial">Unofficial Shows</option>
+    	</select>
+    	<select id="show_day">
+    		<option value="tuesday">Tuesday</option>
+    		<option value="wednesday">Wednesday</option>
+    		<option value="thursday">Thursday</option>
+    		<option value="friday">Friday</option>
+    		<option value="saturday">Saturday</option>
+    		<option value="sunday">Sunday</option>
+    	</select>
+    	<button id="filter_shows">Filter Shows</button>
+      <img id="loading-img" src="img/spinner.gif" style="display:none;" />
+    </div>
+  	<div>
+  		<div id="output"></div>
+  	</div>
+  </div>
+</div>
 
-				    drop_box.addEventListener('drop', function(e){
-				        e.preventDefault();
-				        var drop = models.Playlist.fromURI(e.dataTransfer.getData('text'));
-				        this.classList.remove('over');
-				        var success_message = document.createElement('p');
-				        success_message.innerHTML = 'Playlist successfully dropped: ' + drop.uri;
-				        this.appendChild(success_message);
-						drawPlaylist(drop.uri);
-				    }, false);
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.highlight.js"></script>
+<script src="/js/showlist.js"></script>     
 
-					function drawPlaylist(playlist_url) {
-					    var playlistHTML = document.getElementById('playlist');
+</body>
 
-					    var pl = models.Playlist.fromURI(playlist_url, function(playlist) {
-					        var fragment = document.createDocumentFragment();
-					        for (var i = 0, l = playlist.tracks.length; i < l; i++){
-					            var link = document.createElement('li');
-					            var a = document.createElement('a');
-					            a.href = playlist.tracks[i].uri;
-					            a.innerHTML = playlist.tracks[i].name;
-					            link.appendChild(a);
-					            fragment.appendChild(link);
-					        }
-					        playlistHTML.appendChild(fragment);
-						});
-					}
-
-				</script>
-
-
---
-            </div>
-        </div>
-        <script src="/js/rainbow-custom.min.js"></script>
-        <script src="/js/tutorial.js"></script>
-    </body>
 </html>
